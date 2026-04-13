@@ -104,7 +104,7 @@ export default function Index() {
       {/* Status bar */}
       <div className="bg-[hsl(var(--primary))] text-white flex justify-between items-center px-5 pt-3 pb-1 text-xs font-medium">
         <span>9:41</span>
-        <span className="font-oswald tracking-wide text-sm">ПРАВО ДРУГ</span>
+        <span className="font-oswald tracking-wide text-sm">ВСЁ О ДЕЯТЕЛЬНОСТИ ПОЛИЦИИ</span>
         <div className="flex gap-1 items-center">
           <Icon name="Signal" size={12} />
           <Icon name="Wifi" size={12} />
@@ -481,7 +481,7 @@ function SettingsScreen({
           <div className="px-4 py-5 text-center">
             <div className="text-4xl mb-2">⚖️</div>
             <div className="font-oswald text-xl text-[hsl(var(--primary))] tracking-wide">
-              ПРАВО ДРУГ
+              ВСЁ О ДЕЯТЕЛЬНОСТИ ПОЛИЦИИ
             </div>
             <div className="text-xs text-muted-foreground mt-1">Версия 1.0.0</div>
             <div className="text-xs text-muted-foreground mt-3">Разработано для граждан России</div>
