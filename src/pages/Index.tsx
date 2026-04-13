@@ -13,10 +13,16 @@ interface Message {
 }
 
 const QUICK_QUESTIONS = [
-  "Мои права при задержании",
-  "Что такое презумпция невиновности?",
-  "Как написать жалобу?",
-  "Штрафы за превышение скорости",
+  { emoji: "🚔", text: "Могут ли остановить без причины?" },
+  { emoji: "📋", text: "Как проходит проверка документов?" },
+  { emoji: "🔍", text: "Права при обыске или досмотре" },
+  { emoji: "📞", text: "Когда полиция обязана приехать?" },
+  { emoji: "🙅", text: "Можно ли отказаться от дачи показаний?" },
+  { emoji: "⏱️", text: "Сколько можно держать в отделе?" },
+  { emoji: "📝", text: "Как подать жалобу на сотрудника?" },
+  { emoji: "🛡️", text: "Что делать при незаконном задержании?" },
+  { emoji: "🚗", text: "Права при остановке на дороге" },
+  { emoji: "💬", text: "Обязан ли я называть свои данные?" },
 ];
 
 const COURSES = [
@@ -72,15 +78,13 @@ export default function Index() {
       time: "09:00",
     },
   ]);
-  const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [notifs, setNotifs] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
 
   const sendMessage = (text?: string) => {
-    const msgText = text || input.trim();
+    const msgText = text?.trim();
     if (!msgText) return;
-    setInput("");
 
     const userMsg: Message = { id: Date.now(), from: "user", text: msgText, time: getTime() };
     setMessages((prev) => [...prev, userMsg]);
@@ -89,12 +93,18 @@ export default function Index() {
     setTimeout(() => {
       setIsTyping(false);
       const responses: Record<string, string> = {
-        "Мои права при задержании": "При задержании вы имеете право: хранить молчание, требовать адвоката, знать причину задержания. Максимум без обвинения — 48 часов.",
-        "Что такое презумпция невиновности?": "Презумпция невиновности — принцип, по которому человек считается невиновным, пока не доказано обратное. Это ваш конституционный щит!",
-        "Как написать жалобу?": "Жалоба пишется в свободной форме. Укажите: кому, от кого, суть нарушения, дату и подпись. Я могу помочь составить шаблон.",
-        "Штрафы за превышение скорости": "До 20 км/ч — предупреждение или 500₽. 20–40 км/ч — 1000–1500₽. 40–60 км/ч — 2000–2500₽. Свыше 80 км/ч — 5000₽ или лишение прав.",
+        "Могут ли остановить без причины?": "Полиция вправе остановить вас только при наличии оснований: подозрение в преступлении, ориентировка, проверка по делу или нарушение общественного порядка. Беспричинная остановка — нарушение закона.",
+        "Как проходит проверка документов?": "Сотрудник обязан представиться и назвать причину проверки. Вы предъявляете паспорт или удостоверение. Задерживать вас только для проверки документов нельзя — это должно быть на месте.",
+        "Права при обыске или досмотре": "Личный досмотр проводится только лицом одного пола и при понятых. Обыск — только с постановлением суда. Вы вправе позвонить адвокату и отказаться подписывать протокол с нарушениями.",
+        "Когда полиция обязана приехать?": "Полиция обязана реагировать на любое сообщение о преступлении или угрозе безопасности. Срок реагирования в городе — до 10 минут, в сельской местности — до 30 минут.",
+        "Можно ли отказаться от дачи показаний?": "Да! Статья 51 Конституции РФ даёт право не свидетельствовать против себя и близких родственников. Вы можете хранить молчание до прибытия адвоката.",
+        "Сколько можно держать в отделе?": "Без составления протокола — не более 3 часов. По протоколу задержания — до 48 часов. Дольше — только по решению суда. Вы вправе уведомить родственников.",
+        "Как подать жалобу на сотрудника?": "Жалобу можно подать: начальнику отдела полиции, в прокуратуру, в Следственный комитет или через портал ГосУслуги. Укажите ФИО сотрудника, дату, место и суть нарушения.",
+        "Что делать при незаконном задержании?": "Спокойно сообщите, что задержание незаконно. Позвоните адвокату или родственникам. Запишите имя и звание сотрудника. Не оказывайте сопротивления — это отдельная статья.",
+        "Права при остановке на дороге": "Инспектор обязан представиться, назвать причину остановки. Вы вправе снимать на видео. Выходить из машины нужно только по законному требованию. Ключи и телефон отдавать не обязаны.",
+        "Обязан ли я называть свои данные?": "Да, при законном требовании сотрудника полиции вы обязаны назвать ФИО и показать документы. Отказ может быть квалифицирован как неповиновение законному требованию (ст. 19.3 КоАП).",
       };
-      const reply = responses[msgText] || "Хороший вопрос! По этой теме рекомендую изучить наши курсы права или задать более конкретный вопрос.";
+      const reply = responses[msgText] || "Хороший вопрос! Уточните детали ситуации, и я постараюсь дать точный ответ по законодательству.";
       setMessages((prev) => [...prev, { id: Date.now() + 1, from: "police", text: reply, time: getTime() }]);
     }, 1500);
   };
@@ -118,8 +128,8 @@ export default function Index() {
           <HomeScreen
             messages={messages}
             isTyping={isTyping}
-            input={input}
-            setInput={setInput}
+            input=""
+            setInput={() => {}}
             sendMessage={sendMessage}
             quickQuestions={QUICK_QUESTIONS}
           />
@@ -171,8 +181,6 @@ export default function Index() {
 function HomeScreen({
   messages,
   isTyping,
-  input,
-  setInput,
   sendMessage,
   quickQuestions,
 }: {
@@ -181,8 +189,10 @@ function HomeScreen({
   input: string;
   setInput: (v: string) => void;
   sendMessage: (text?: string) => void;
-  quickQuestions: string[];
+  quickQuestions: { emoji: string; text: string }[];
 }) {
+  const hasDialog = messages.length > 1 || isTyping;
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -211,22 +221,6 @@ function HomeScreen({
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Quick questions */}
-      <div
-        className="px-4 py-2 bg-secondary/50 flex gap-2 overflow-x-auto"
-        style={{ scrollbarWidth: "none" }}
-      >
-        {quickQuestions.map((q) => (
-          <button
-            key={q}
-            onClick={() => sendMessage(q)}
-            className="flex-none bg-white text-[hsl(var(--primary))] text-xs px-3 py-1.5 rounded-full border border-blue-100 whitespace-nowrap font-medium hover:bg-[hsl(var(--primary))] hover:text-white transition-all"
-          >
-            {q}
-          </button>
-        ))}
       </div>
 
       {/* Messages */}
@@ -276,23 +270,25 @@ function HomeScreen({
         )}
       </div>
 
-      {/* Input */}
-      <div className="px-4 py-3 border-t border-border bg-white">
-        <div className="flex gap-2 items-center bg-secondary rounded-2xl px-4 py-2">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            placeholder="Задайте правовой вопрос..."
-            className="flex-1 bg-transparent text-sm outline-none text-foreground placeholder:text-muted-foreground"
-          />
-          <button
-            onClick={() => sendMessage()}
-            disabled={!input.trim()}
-            className="w-8 h-8 rounded-xl bg-[hsl(var(--primary))] text-white flex items-center justify-center disabled:opacity-40 transition-all active:scale-90"
-          >
-            <Icon name="Send" size={15} />
-          </button>
+      {/* Question selector */}
+      <div className="border-t border-border bg-white px-4 pt-3 pb-3">
+        {!hasDialog && (
+          <div className="text-xs text-muted-foreground font-medium mb-2 px-1">Выберите вопрос:</div>
+        )}
+        {hasDialog && (
+          <div className="text-xs text-muted-foreground font-medium mb-2 px-1">Задать другой вопрос:</div>
+        )}
+        <div className="grid grid-cols-2 gap-2">
+          {quickQuestions.map((q) => (
+            <button
+              key={q.text}
+              onClick={() => sendMessage(q.text)}
+              className="flex items-center gap-2 bg-secondary hover:bg-[hsl(var(--primary))] hover:text-white text-foreground text-xs px-3 py-2.5 rounded-xl border border-border text-left transition-all active:scale-95 group"
+            >
+              <span className="text-base flex-none">{q.emoji}</span>
+              <span className="leading-tight">{q.text}</span>
+            </button>
+          ))}
         </div>
       </div>
     </div>
