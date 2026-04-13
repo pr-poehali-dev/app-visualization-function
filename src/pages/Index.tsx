@@ -68,7 +68,7 @@ export default function Index() {
     {
       id: 1,
       from: "police",
-      text: "Здравствуйте! Я капитан Алексей — ваш помощник по правовым вопросам. Чем могу помочь?",
+      text: "Здравствуйте! Я Алексей Капитанов — ваш цифровой участковый. Чем могу помочь?",
       time: "09:00",
     },
   ]);
@@ -197,8 +197,8 @@ function HomeScreen({
             <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 border-[hsl(var(--primary))]" />
           </div>
           <div>
-            <div className="font-semibold text-base">Капитан Алексей</div>
-            <div className="text-blue-200 text-xs">Эксперт по правовым вопросам</div>
+            <div className="font-semibold text-base">Алексей Капитанов</div>
+            <div className="text-blue-200 text-xs">Ваш Цифровой участковый</div>
             <div className="flex items-center gap-1 text-emerald-300 text-xs mt-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
               Онлайн
