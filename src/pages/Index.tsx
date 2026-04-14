@@ -409,7 +409,7 @@ const COURSES_DATA = [
     emoji: "🤝",
     title: "Гражданское право РФ",
     desc: "Сделки, собственность, договоры",
-    color: "from-emerald-600 to-teal-800",
+    color: "from-pink-500 to-rose-700",
     lessons: [
       "Субъекты гражданского права: физлица и юрлица",
       "Право собственности и его виды",
@@ -466,8 +466,8 @@ function CoursesPageScreen() {
     const courseDone = course.lessons.filter((_, i) => done.has(`${course.id}-${i}`)).length;
     const pct = Math.round((courseDone / course.lessons.length) * 100);
 
-    // Только для курса 1 — цепочка Duolingo
-    const isDuolingo = course.id === 1;
+    // Цепочка Duolingo для курсов 1 и 2
+    const isDuolingo = course.id === 1 || course.id === 2;
 
     // Змейка: чётные узлы — левее центра, нечётные — правее
     const nodePositions = ["center", "right", "center", "left", "center", "right", "center"];
@@ -498,6 +498,13 @@ function CoursesPageScreen() {
 
         {isDuolingo ? (
           <div className="flex-1 overflow-y-auto py-6 px-4 bg-secondary/30">
+            {/* Тема цепочки по курсу */}
+            {(() => {
+              const theme = course.id === 2
+                ? { active: "bg-pink-500 border-pink-700", done: "bg-rose-400 border-rose-600", connector: "bg-rose-400", badge: "bg-pink-400", text: "text-rose-700" }
+                : { active: "bg-[hsl(var(--primary))] border-green-800", done: "bg-emerald-500 border-emerald-700", connector: "bg-emerald-400", badge: "bg-[hsl(var(--accent))]", text: "text-emerald-700" };
+
+              return (
             <div className="flex flex-col gap-0">
               {course.lessons.map((lesson, i) => {
                 const key = `${course.id}-${i}`;
@@ -508,46 +515,33 @@ function CoursesPageScreen() {
 
                 return (
                   <div key={i} className={`flex flex-col ${posClass[pos]}`}>
-                    {/* Коннектор сверху */}
                     {i > 0 && (
-                      <div className={`w-1 h-6 rounded-full mx-auto mb-1 ${isDone ? "bg-emerald-400" : "bg-border"}`} />
+                      <div className={`w-1 h-6 rounded-full mx-auto mb-1 ${isDone ? theme.connector : "bg-border"}`} />
                     )}
 
-                    {/* Узел */}
                     <div className="relative flex flex-col items-center">
                       <button
                         onClick={() => isNext && markLesson(key)}
                         disabled={isLocked}
                         className={`w-20 h-20 rounded-[28px] flex flex-col items-center justify-center shadow-lg transition-all active:scale-95 border-b-4 relative
-                          ${isDone ? "bg-emerald-500 border-emerald-700" : isNext ? "bg-[hsl(var(--primary))] border-green-800 animate-pulse" : "bg-muted border-border opacity-60"}
+                          ${isDone ? theme.done : isNext ? `${theme.active} animate-pulse` : "bg-muted border-border opacity-60"}
                         `}
                       >
                         {isDone ? (
-                          <>
-                            <span className="text-2xl">⭐</span>
-                            <span className="text-white text-[10px] font-bold mt-0.5">Готово</span>
-                          </>
+                          <><span className="text-2xl">⭐</span><span className="text-white text-[10px] font-bold mt-0.5">Готово</span></>
                         ) : isNext ? (
-                          <>
-                            <span className="text-2xl">📖</span>
-                            <span className="text-white text-[10px] font-bold mt-0.5">Старт</span>
-                          </>
+                          <><span className="text-2xl">📖</span><span className="text-white text-[10px] font-bold mt-0.5">Старт</span></>
                         ) : (
-                          <>
-                            <span className="text-2xl">🔒</span>
-                            <span className="text-muted-foreground text-[10px] font-bold mt-0.5">Закрыт</span>
-                          </>
+                          <><span className="text-2xl">🔒</span><span className="text-muted-foreground text-[10px] font-bold mt-0.5">Закрыт</span></>
                         )}
-                        {/* Номер урока */}
                         <div className={`absolute -top-2 -right-2 w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center border-2 border-white
-                          ${isDone ? "bg-emerald-400 text-white" : isNext ? "bg-[hsl(var(--accent))] text-white" : "bg-muted-foreground/30 text-muted-foreground"}`}>
+                          ${isDone ? theme.badge : isNext ? theme.badge : "bg-muted-foreground/30 text-muted-foreground"} text-white`}>
                           {i + 1}
                         </div>
                       </button>
 
-                      {/* Подпись */}
                       <div className={`mt-2 text-center max-w-[120px] text-xs font-medium leading-tight
-                        ${isDone ? "text-emerald-700" : isNext ? "text-foreground" : "text-muted-foreground"}`}>
+                        ${isDone ? theme.text : isNext ? "text-foreground" : "text-muted-foreground"}`}>
                         {lesson}
                       </div>
                     </div>
@@ -557,7 +551,7 @@ function CoursesPageScreen() {
 
               {/* Финал */}
               <div className="flex flex-col self-center items-center mt-2">
-                <div className={`w-1 h-6 rounded-full ${courseDone === course.lessons.length ? "bg-emerald-400" : "bg-border"}`} />
+                <div className={`w-1 h-6 rounded-full ${courseDone === course.lessons.length ? theme.connector : "bg-border"}`} />
                 <div className={`w-20 h-20 rounded-[28px] flex flex-col items-center justify-center border-b-4 shadow-lg
                   ${courseDone === course.lessons.length ? "bg-amber-400 border-amber-600" : "bg-muted border-border opacity-50"}`}>
                   <span className="text-3xl">🏆</span>
@@ -565,6 +559,8 @@ function CoursesPageScreen() {
                 </div>
               </div>
             </div>
+              );
+            })()}
           </div>
         ) : (
           <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-2.5">
