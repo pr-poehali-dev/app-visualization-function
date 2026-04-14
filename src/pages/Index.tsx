@@ -465,8 +465,22 @@ function CoursesPageScreen() {
   if (course) {
     const courseDone = course.lessons.filter((_, i) => done.has(`${course.id}-${i}`)).length;
     const pct = Math.round((courseDone / course.lessons.length) * 100);
+
+    // Только для курса 1 — цепочка Duolingo
+    const isDuolingo = course.id === 1;
+
+    // Змейка: чётные узлы — левее центра, нечётные — правее
+    const nodePositions = ["center", "right", "center", "left", "center", "right", "center"];
+
+    const posClass: Record<string, string> = {
+      left: "self-start ml-6",
+      center: "self-center",
+      right: "self-end mr-6",
+    };
+
     return (
       <div className="h-full flex flex-col overflow-hidden">
+        {/* Шапка курса */}
         <div className={`bg-gradient-to-br ${course.color} px-4 pt-5 pb-5 text-white flex-none`}>
           <button onClick={() => setOpenCourse(null)} className="flex items-center gap-1 text-white/80 text-sm mb-3">
             <Icon name="ChevronLeft" size={18} /> Все курсы
@@ -482,29 +496,99 @@ function CoursesPageScreen() {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-2.5">
-          {course.lessons.map((lesson, i) => {
-            const key = `${course.id}-${i}`;
-            const isDone = done.has(key);
-            return (
-              <div key={i} className={`bg-white rounded-2xl border-2 px-4 py-3.5 flex items-center gap-3 transition-all ${isDone ? "border-emerald-300" : "border-border"}`}>
-                <button
-                  onClick={() => markLesson(key)}
-                  className={`w-7 h-7 rounded-full border-2 flex-none flex items-center justify-center transition-all ${isDone ? "bg-emerald-500 border-emerald-500" : "border-muted-foreground/30"}`}
-                >
-                  {isDone && <Icon name="Check" size={13} className="text-white" />}
-                </button>
-                <div className="flex-1">
-                  <div className={`text-sm font-medium leading-tight ${isDone ? "text-muted-foreground line-through" : "text-foreground"}`}>
-                    {lesson}
+        {isDuolingo ? (
+          <div className="flex-1 overflow-y-auto py-6 px-4 bg-secondary/30">
+            <div className="flex flex-col gap-0">
+              {course.lessons.map((lesson, i) => {
+                const key = `${course.id}-${i}`;
+                const isDone = done.has(key);
+                const isNext = courseDone === i;
+                const isLocked = i > courseDone;
+                const pos = nodePositions[i] ?? "center";
+
+                return (
+                  <div key={i} className={`flex flex-col ${posClass[pos]}`}>
+                    {/* Коннектор сверху */}
+                    {i > 0 && (
+                      <div className={`w-1 h-6 rounded-full mx-auto mb-1 ${isDone ? "bg-emerald-400" : "bg-border"}`} />
+                    )}
+
+                    {/* Узел */}
+                    <div className="relative flex flex-col items-center">
+                      <button
+                        onClick={() => isNext && markLesson(key)}
+                        disabled={isLocked}
+                        className={`w-20 h-20 rounded-[28px] flex flex-col items-center justify-center shadow-lg transition-all active:scale-95 border-b-4 relative
+                          ${isDone ? "bg-emerald-500 border-emerald-700" : isNext ? "bg-[hsl(var(--primary))] border-green-800 animate-pulse" : "bg-muted border-border opacity-60"}
+                        `}
+                      >
+                        {isDone ? (
+                          <>
+                            <span className="text-2xl">⭐</span>
+                            <span className="text-white text-[10px] font-bold mt-0.5">Готово</span>
+                          </>
+                        ) : isNext ? (
+                          <>
+                            <span className="text-2xl">📖</span>
+                            <span className="text-white text-[10px] font-bold mt-0.5">Старт</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="text-2xl">🔒</span>
+                            <span className="text-muted-foreground text-[10px] font-bold mt-0.5">Закрыт</span>
+                          </>
+                        )}
+                        {/* Номер урока */}
+                        <div className={`absolute -top-2 -right-2 w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center border-2 border-white
+                          ${isDone ? "bg-emerald-400 text-white" : isNext ? "bg-[hsl(var(--accent))] text-white" : "bg-muted-foreground/30 text-muted-foreground"}`}>
+                          {i + 1}
+                        </div>
+                      </button>
+
+                      {/* Подпись */}
+                      <div className={`mt-2 text-center max-w-[120px] text-xs font-medium leading-tight
+                        ${isDone ? "text-emerald-700" : isNext ? "text-foreground" : "text-muted-foreground"}`}>
+                        {lesson}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-[10px] text-muted-foreground mt-0.5">Урок {i + 1}</div>
+                );
+              })}
+
+              {/* Финал */}
+              <div className="flex flex-col self-center items-center mt-2">
+                <div className={`w-1 h-6 rounded-full ${courseDone === course.lessons.length ? "bg-emerald-400" : "bg-border"}`} />
+                <div className={`w-20 h-20 rounded-[28px] flex flex-col items-center justify-center border-b-4 shadow-lg
+                  ${courseDone === course.lessons.length ? "bg-amber-400 border-amber-600" : "bg-muted border-border opacity-50"}`}>
+                  <span className="text-3xl">🏆</span>
+                  <span className={`text-[10px] font-bold mt-0.5 ${courseDone === course.lessons.length ? "text-white" : "text-muted-foreground"}`}>Финал</span>
                 </div>
-                {!isDone && <Icon name="ChevronRight" size={16} className="text-muted-foreground flex-none" />}
               </div>
-            );
-          })}
-        </div>
+            </div>
+          </div>
+        ) : (
+          <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-2.5">
+            {course.lessons.map((lesson, i) => {
+              const key = `${course.id}-${i}`;
+              const isDone = done.has(key);
+              return (
+                <div key={i} className={`bg-white rounded-2xl border-2 px-4 py-3.5 flex items-center gap-3 transition-all ${isDone ? "border-emerald-300" : "border-border"}`}>
+                  <button
+                    onClick={() => markLesson(key)}
+                    className={`w-7 h-7 rounded-full border-2 flex-none flex items-center justify-center transition-all ${isDone ? "bg-emerald-500 border-emerald-500" : "border-muted-foreground/30"}`}
+                  >
+                    {isDone && <Icon name="Check" size={13} className="text-white" />}
+                  </button>
+                  <div className="flex-1">
+                    <div className={`text-sm font-medium leading-tight ${isDone ? "text-muted-foreground line-through" : "text-foreground"}`}>{lesson}</div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">Урок {i + 1}</div>
+                  </div>
+                  {!isDone && <Icon name="ChevronRight" size={16} className="text-muted-foreground flex-none" />}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   }
