@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
-const EXPERT_IMG = "https://cdn.poehali.dev/projects/a0240a83-f56c-4d98-8cd9-7794f9252c9a/files/6a89ad7e-5a60-4ced-bce9-bc2e044b80c4.jpg";
+const EXPERT_IMG = "https://cdn.poehali.dev/projects/a0240a83-f56c-4d98-8cd9-7794f9252c9a/files/95f876b8-b139-4cba-9428-814543e7a2cf.jpg";
 
 type Tab = "home" | "courses" | "profile" | "settings";
 
