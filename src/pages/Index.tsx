@@ -127,7 +127,7 @@ export default function Index() {
         {(
           [
             { id: "home", icon: "LayoutGrid", label: "Модули" },
-            { id: "courses", icon: "MessageCircle", label: "Диалог" },
+            { id: "courses", icon: "BookOpen", label: "Курсы" },
             { id: "profile", icon: "User", label: "Профиль" },
             { id: "settings", icon: "Settings", label: "Настройки" },
           ] as { id: Tab; icon: string; label: string }[]
