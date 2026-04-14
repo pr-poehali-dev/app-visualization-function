@@ -150,7 +150,7 @@ export default function Index() {
       <div className="glass-card border-t border-border flex items-center justify-around px-2 py-2 mobile-safe">
         {(
           [
-            { id: "home", icon: "MessageCircle", label: "Диалог" },
+            { id: "home", icon: "LayoutGrid", label: "Модули" },
             { id: "courses", icon: "BookOpen", label: "Курсы" },
             { id: "profile", icon: "User", label: "Профиль" },
             { id: "settings", icon: "Settings", label: "Настройки" },
