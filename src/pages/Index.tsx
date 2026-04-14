@@ -332,21 +332,20 @@ function CoursesScreen({ modules }: { modules: typeof MODULES }) {
           <div key={tag} className="mb-4">
             <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">{tag}</div>
             <div className="grid grid-cols-2 gap-2.5">
-              {modules.filter((m) => m.tag === tag).map((m, i) => {
+              {modules.filter((m) => m.tag === tag).map((m) => {
                 const isRead = read.has(m.id);
                 const isActive = selected === m.id;
                 return (
                   <button
                     key={m.id}
                     onClick={() => setSelected(isActive ? null : m.id)}
-                    className={`relative text-left rounded-2xl overflow-hidden border-2 transition-all active:scale-95 animate-fade-in ${
+                    className={`relative text-left rounded-2xl overflow-hidden border-2 transition-all active:scale-95 ${
                       isActive
-                        ? "border-[hsl(var(--primary))] shadow-md"
+                        ? "border-[hsl(var(--primary))] shadow-md scale-[0.98]"
                         : isRead
                         ? "border-emerald-300"
                         : "border-border"
                     }`}
-                    style={{ animationDelay: `${i * 0.06}s`, opacity: 0 }}
                   >
                     <div className={`bg-gradient-to-br ${m.color} px-3 pt-3 pb-2 flex flex-col`}>
                       <span className="text-3xl mb-1">{m.emoji}</span>
