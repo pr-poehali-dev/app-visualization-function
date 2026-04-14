@@ -4,39 +4,39 @@
 
 @layer base {
   :root {
-    --background: 215 25% 97%;
-    --foreground: 220 30% 12%;
+    --background: 140 20% 97%;
+    --foreground: 150 30% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 30% 12%;
+    --card-foreground: 150 30% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 30% 12%;
+    --popover-foreground: 150 30% 10%;
 
-    --primary: 216 80% 28%;
+    --primary: 150 60% 25%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 215 20% 93%;
-    --secondary-foreground: 220 30% 20%;
+    --secondary: 140 20% 92%;
+    --secondary-foreground: 150 30% 18%;
 
-    --muted: 215 20% 93%;
-    --muted-foreground: 215 15% 50%;
+    --muted: 140 20% 92%;
+    --muted-foreground: 140 15% 48%;
 
-    --accent: 38 90% 52%;
+    --accent: 45 90% 48%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 215 20% 88%;
-    --input: 215 20% 88%;
-    --ring: 216 80% 28%;
+    --border: 140 20% 86%;
+    --input: 140 20% 86%;
+    --ring: 150 60% 25%;
 
     --radius: 1rem;
 
-    --police-blue: 216 80% 28%;
-    --police-gold: 38 90% 52%;
-    --police-light: 215 25% 97%;
+    --mortgage-green: 150 60% 25%;
+    --mortgage-gold: 45 90% 48%;
+    --mortgage-light: 140 20% 97%;
 
     --sidebar-background: 0 0% 98%;
 
