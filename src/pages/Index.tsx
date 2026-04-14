@@ -298,51 +298,120 @@ function HomeScreen({
 function CoursesScreen({ courses }: { courses: typeof COURSES }) {
   const [selected, setSelected] = useState<number | null>(null);
 
+  const totalProgress = Math.round(
+    courses.reduce((sum, c) => sum + c.progress, 0) / courses.length
+  );
+  const done = courses.filter((c) => c.progress === 100).length;
+  const inProgress = courses.filter((c) => c.progress > 0 && c.progress < 100).length;
+
+  const selectedCourse = courses.find((c) => c.id === selected);
+
   return (
     <div className="h-full overflow-y-auto">
-      <div className="bg-[hsl(var(--primary))] px-4 py-5 text-white">
-        <div className="font-oswald text-2xl tracking-wide">МОДУЛИ</div>
-        <div className="text-green-200 text-sm mt-0.5">Изучай ипотеку шаг за шагом</div>
+      {/* Header */}
+      <div className="bg-[hsl(var(--primary))] px-4 pt-5 pb-6 text-white">
+        <div className="font-oswald text-2xl tracking-wide mb-1">МОДУЛИ</div>
+        <div className="text-green-200 text-sm mb-4">Изучай ипотеку шаг за шагом</div>
+
+        {/* Общий прогресс */}
+        <div className="bg-white/10 rounded-2xl p-4">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm font-medium">Общий прогресс</span>
+            <span className="font-oswald text-xl text-[hsl(var(--accent))]">{totalProgress}%</span>
+          </div>
+          <div className="h-2 bg-white/20 rounded-full overflow-hidden mb-3">
+            <div
+              className="h-full bg-[hsl(var(--accent))] rounded-full transition-all"
+              style={{ width: `${totalProgress}%` }}
+            />
+          </div>
+          <div className="flex gap-4 text-xs text-green-200">
+            <span>📚 {courses.length} модуля</span>
+            <span>✅ {done} завершено</span>
+            <span>⏳ {inProgress} в процессе</span>
+          </div>
+        </div>
       </div>
 
-      <div className="p-4 flex flex-col gap-3">
-        {courses.map((course, i) => (
-          <div
-            key={course.id}
-            onClick={() => setSelected(selected === course.id ? null : course.id)}
-            className="bg-white rounded-2xl overflow-hidden shadow-sm border border-border animate-fade-in cursor-pointer active:scale-[0.98] transition-all"
-            style={{ animationDelay: `${i * 0.08}s`, opacity: 0 }}
-          >
-            <div className={`bg-gradient-to-r ${course.color} p-4 flex items-center gap-3`}>
-              <span className="text-3xl">{course.icon}</span>
+      {/* Детальная карточка выбранного */}
+      {selectedCourse && (
+        <div className="mx-4 mt-4 animate-fade-in">
+          <div className={`bg-gradient-to-br ${selectedCourse.color} rounded-2xl p-5 text-white shadow-lg`}>
+            <div className="flex items-start gap-3 mb-4">
+              <span className="text-4xl">{selectedCourse.icon}</span>
               <div className="flex-1">
-                <div className="text-white font-semibold">{course.title}</div>
-                <div className="text-white/70 text-xs">{course.desc}</div>
+                <div className="font-oswald text-xl tracking-wide">{selectedCourse.title}</div>
+                <div className="text-white/80 text-sm mt-0.5">{selectedCourse.desc}</div>
               </div>
-              <div className="text-white/80 text-xs">{course.lessons} уроков</div>
+              <button
+                onClick={() => setSelected(null)}
+                className="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center"
+              >
+                <Icon name="X" size={14} />
+              </button>
             </div>
-            <div className="px-4 py-3">
-              <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
-                <span>Прогресс</span>
-                <span className="font-semibold text-foreground">{course.progress}%</span>
-              </div>
-              <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-                <div
-                  className={`h-full bg-gradient-to-r ${course.color} rounded-full transition-all`}
-                  style={{ width: `${course.progress}%` }}
-                />
-              </div>
-              {selected === course.id && (
-                <div className="mt-3 pt-3 border-t border-border animate-fade-in">
-                  <button className="w-full bg-[hsl(var(--primary))] text-white rounded-xl py-2.5 text-sm font-semibold">
-                    {course.progress > 0 ? "Продолжить обучение" : "Начать курс"}
-                  </button>
-                </div>
-              )}
+            <div className="flex gap-3 text-xs text-white/80 mb-4">
+              <span className="bg-white/15 rounded-lg px-2.5 py-1">📖 {selectedCourse.lessons} уроков</span>
+              <span className="bg-white/15 rounded-lg px-2.5 py-1">🕐 ~{selectedCourse.lessons * 15} мин</span>
+              <span className="bg-white/15 rounded-lg px-2.5 py-1">🏆 Сертификат</span>
             </div>
+            <div className="flex justify-between text-xs mb-1.5">
+              <span>Прогресс</span>
+              <span className="font-bold">{selectedCourse.progress}%</span>
+            </div>
+            <div className="h-2 bg-white/20 rounded-full overflow-hidden mb-4">
+              <div
+                className="h-full bg-white rounded-full transition-all"
+                style={{ width: `${selectedCourse.progress}%` }}
+              />
+            </div>
+            <button className="w-full bg-white text-[hsl(var(--primary))] rounded-xl py-3 text-sm font-bold shadow">
+              {selectedCourse.progress > 0 ? "▶ Продолжить обучение" : "🚀 Начать модуль"}
+            </button>
           </div>
-        ))}
+        </div>
+      )}
+
+      {/* Сетка модулей */}
+      <div className="p-4 grid grid-cols-2 gap-3">
+        {courses.map((course, i) => {
+          const isActive = selected === course.id;
+          return (
+            <div
+              key={course.id}
+              onClick={() => setSelected(isActive ? null : course.id)}
+              className={`bg-white rounded-2xl overflow-hidden shadow-sm border-2 transition-all cursor-pointer active:scale-95 animate-fade-in ${
+                isActive ? "border-[hsl(var(--primary))] shadow-md" : "border-border"
+              }`}
+              style={{ animationDelay: `${i * 0.08}s`, opacity: 0 }}
+            >
+              <div className={`bg-gradient-to-br ${course.color} p-4 flex flex-col items-center text-center`}>
+                <span className="text-4xl mb-1">{course.icon}</span>
+                {course.progress === 100 && (
+                  <span className="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-medium">✓ Завершён</span>
+                )}
+                {course.progress > 0 && course.progress < 100 && (
+                  <span className="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-medium">В процессе</span>
+                )}
+                {course.progress === 0 && (
+                  <span className="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-medium">Новый</span>
+                )}
+              </div>
+              <div className="p-3">
+                <div className="font-semibold text-xs text-foreground leading-tight mb-1">{course.title}</div>
+                <div className="text-[10px] text-muted-foreground mb-2">{course.lessons} уроков</div>
+                <div className="h-1 bg-secondary rounded-full overflow-hidden">
+                  <div
+                    className={`h-full bg-gradient-to-r ${course.color} rounded-full`}
+                    style={{ width: `${course.progress}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
+      <div className="h-4" />
     </div>
   );
 }
