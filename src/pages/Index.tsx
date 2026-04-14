@@ -25,43 +25,19 @@ const QUICK_QUESTIONS = [
   { emoji: "💸", text: "Как досрочно погасить ипотеку?" },
 ];
 
-const COURSES = [
-  {
-    id: 1,
-    icon: "🏠",
-    title: "Ипотека: с нуля",
-    desc: "Как работает ипотека и с чего начать",
-    lessons: 10,
-    progress: 60,
-    color: "from-green-600 to-emerald-800",
-  },
-  {
-    id: 2,
-    icon: "📊",
-    title: "Ставки и расчёты",
-    desc: "Считаем платежи, переплату и выгоду",
-    lessons: 8,
-    progress: 30,
-    color: "from-teal-500 to-green-700",
-  },
-  {
-    id: 3,
-    icon: "📋",
-    title: "Документы и одобрение",
-    desc: "Как пройти проверку банка",
-    lessons: 7,
-    progress: 0,
-    color: "from-emerald-500 to-teal-700",
-  },
-  {
-    id: 4,
-    icon: "💸",
-    title: "Льготы и рефинансирование",
-    desc: "Госпрограммы, маткапитал, снижение ставки",
-    lessons: 9,
-    progress: 0,
-    color: "from-lime-600 to-green-700",
-  },
+const MODULES = [
+  { id: 1, emoji: "🏠", title: "Что такое ипотека", tag: "Основы", color: "from-green-500 to-emerald-700", content: "Ипотека — это долгосрочный кредит под залог недвижимости. Банк даёт деньги на покупку жилья, а квартира остаётся в залоге до полного погашения. Срок — от 5 до 30 лет." },
+  { id: 2, emoji: "💰", title: "Первоначальный взнос", tag: "Основы", color: "from-emerald-500 to-teal-700", content: "Взнос — от 10 до 30% стоимости жилья. Чем он больше — тем ниже ставка. Можно использовать маткапитал или накопления. Минимальный взнос по льготной ипотеке — 20%." },
+  { id: 3, emoji: "📊", title: "Как считается платёж", tag: "Расчёты", color: "from-teal-500 to-green-700", content: "Платёж зависит от суммы, ставки и срока. 5 млн на 20 лет под 8% = ~41 800₽/мес. Аннуитетный платёж — одинаковый каждый месяц. Дифференцированный — уменьшается со временем." },
+  { id: 4, emoji: "🏦", title: "Как выбрать банк", tag: "Выбор", color: "from-green-600 to-lime-700", content: "Сравнивайте ставку, срок одобрения и условия досрочного погашения. Подайте заявки в 2–3 банка одновременно. Лучшие предложения: Сбер, ВТБ, Альфа, Дом.РФ." },
+  { id: 5, emoji: "📋", title: "Документы для банка", tag: "Документы", color: "from-lime-600 to-green-700", content: "Паспорт, СНИЛС, справка 2-НДФЛ, трудовая книжка. Самозанятым — выписка из налоговой. На квартиру: договор купли-продажи, выписка из ЕГРН, техпаспорт." },
+  { id: 6, emoji: "✅", title: "Одобрение ипотеки", tag: "Процесс", color: "from-emerald-600 to-green-800", content: "Банк проверяет: кредитную историю, доход, занятость и долговую нагрузку. Норма: платёж не более 40% от зарплаты. Решение — за 1–5 рабочих дней." },
+  { id: 7, emoji: "📉", title: "Фиксированная vs плавающая ставка", tag: "Ставки", color: "from-green-500 to-teal-700", content: "Фиксированная — не меняется весь срок, вы знаете свой платёж. Плавающая — привязана к ключевой ставке ЦБ, может вырасти. Для большинства безопаснее фиксированная." },
+  { id: 8, emoji: "🔑", title: "Рефинансирование", tag: "Льготы", color: "from-teal-600 to-emerald-800", content: "Перевод ипотеки в другой банк под более низкую ставку. Выгодно при разнице от 1,5%. Например: было 12% → стало 8% — экономия сотни тысяч рублей за весь срок." },
+  { id: 9, emoji: "🛡️", title: "Просрочка и риски", tag: "Важно", color: "from-green-700 to-teal-900", content: "После первой просрочки — пени. При долге 3+ месяца — суд и продажа квартиры. Если трудности — сразу идите в банк за реструктуризацией или ипотечными каникулами." },
+  { id: 10, emoji: "💸", title: "Досрочное погашение", tag: "Советы", color: "from-lime-500 to-green-700", content: "Вносите допсуммы и выбирайте сокращение срока — это выгоднее. Даже 5 000₽ сверх платежа в месяц сократит срок на несколько лет и сэкономит сотни тысяч на процентах." },
+  { id: 11, emoji: "👨‍👩‍👧", title: "Семейная ипотека", tag: "Льготы", color: "from-emerald-500 to-lime-700", content: "Ставка от 6% для семей с детьми, рождёнными после 2018 года. Максимум: 12 млн для Москвы и СПб, 6 млн для регионов. Первый взнос — от 20%. Действует до 2030 года." },
+  { id: 12, emoji: "🏗️", title: "Ипотека на новостройку", tag: "Виды", color: "from-green-600 to-emerald-800", content: "Банк перечисляет деньги на эскроу-счёт — застройщик получит их только после сдачи дома. Это защищает покупателя. Ставки по льготным программам — от 6–8%." },
 ];
 
 function getTime() {
@@ -134,7 +110,7 @@ export default function Index() {
             quickQuestions={QUICK_QUESTIONS}
           />
         )}
-        {tab === "courses" && <CoursesScreen courses={COURSES} />}
+        {tab === "courses" && <CoursesScreen modules={MODULES} />}
         {tab === "profile" && <ProfileScreen />}
         {tab === "settings" && (
           <SettingsScreen
@@ -295,123 +271,99 @@ function HomeScreen({
   );
 }
 
-function CoursesScreen({ courses }: { courses: typeof COURSES }) {
+function CoursesScreen({ modules }: { modules: typeof MODULES }) {
   const [selected, setSelected] = useState<number | null>(null);
+  const [read, setRead] = useState<Set<number>>(new Set());
 
-  const totalProgress = Math.round(
-    courses.reduce((sum, c) => sum + c.progress, 0) / courses.length
-  );
-  const done = courses.filter((c) => c.progress === 100).length;
-  const inProgress = courses.filter((c) => c.progress > 0 && c.progress < 100).length;
+  const selectedModule = modules.find((m) => m.id === selected);
 
-  const selectedCourse = courses.find((c) => c.id === selected);
+  const tags = Array.from(new Set(modules.map((m) => m.tag)));
+
+  const handleRead = (id: number) => {
+    setRead((prev) => new Set([...prev, id]));
+    setSelected(null);
+  };
 
   return (
-    <div className="h-full overflow-y-auto">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-[hsl(var(--primary))] px-4 pt-5 pb-6 text-white">
-        <div className="font-oswald text-2xl tracking-wide mb-1">МОДУЛИ</div>
-        <div className="text-green-200 text-sm mb-4">Изучай ипотеку шаг за шагом</div>
-
-        {/* Общий прогресс */}
-        <div className="bg-white/10 rounded-2xl p-4">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium">Общий прогресс</span>
-            <span className="font-oswald text-xl text-[hsl(var(--accent))]">{totalProgress}%</span>
-          </div>
-          <div className="h-2 bg-white/20 rounded-full overflow-hidden mb-3">
-            <div
-              className="h-full bg-[hsl(var(--accent))] rounded-full transition-all"
-              style={{ width: `${totalProgress}%` }}
-            />
-          </div>
-          <div className="flex gap-4 text-xs text-green-200">
-            <span>📚 {courses.length} модуля</span>
-            <span>✅ {done} завершено</span>
-            <span>⏳ {inProgress} в процессе</span>
-          </div>
+      <div className="bg-[hsl(var(--primary))] px-4 pt-4 pb-4 text-white flex-none">
+        <div className="font-oswald text-2xl tracking-wide">МОДУЛИ</div>
+        <div className="text-green-200 text-sm mt-0.5">{read.size} из {modules.length} изучено</div>
+        <div className="mt-3 h-1.5 bg-white/20 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-[hsl(var(--accent))] rounded-full transition-all"
+            style={{ width: `${Math.round((read.size / modules.length) * 100)}%` }}
+          />
         </div>
       </div>
 
-      {/* Детальная карточка выбранного */}
-      {selectedCourse && (
-        <div className="mx-4 mt-4 animate-fade-in">
-          <div className={`bg-gradient-to-br ${selectedCourse.color} rounded-2xl p-5 text-white shadow-lg`}>
-            <div className="flex items-start gap-3 mb-4">
-              <span className="text-4xl">{selectedCourse.icon}</span>
+      {/* Открытый модуль */}
+      {selectedModule && (
+        <div className="flex-none mx-4 mt-4 animate-fade-in">
+          <div className={`bg-gradient-to-br ${selectedModule.color} rounded-2xl p-4 text-white shadow-lg`}>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-3xl">{selectedModule.emoji}</span>
               <div className="flex-1">
-                <div className="font-oswald text-xl tracking-wide">{selectedCourse.title}</div>
-                <div className="text-white/80 text-sm mt-0.5">{selectedCourse.desc}</div>
+                <div className="font-semibold text-sm leading-tight">{selectedModule.title}</div>
+                <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">{selectedModule.tag}</span>
               </div>
               <button
                 onClick={() => setSelected(null)}
-                className="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center"
+                className="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center flex-none"
               >
-                <Icon name="X" size={14} />
+                <Icon name="X" size={13} />
               </button>
             </div>
-            <div className="flex gap-3 text-xs text-white/80 mb-4">
-              <span className="bg-white/15 rounded-lg px-2.5 py-1">📖 {selectedCourse.lessons} уроков</span>
-              <span className="bg-white/15 rounded-lg px-2.5 py-1">🕐 ~{selectedCourse.lessons * 15} мин</span>
-              <span className="bg-white/15 rounded-lg px-2.5 py-1">🏆 Сертификат</span>
-            </div>
-            <div className="flex justify-between text-xs mb-1.5">
-              <span>Прогресс</span>
-              <span className="font-bold">{selectedCourse.progress}%</span>
-            </div>
-            <div className="h-2 bg-white/20 rounded-full overflow-hidden mb-4">
-              <div
-                className="h-full bg-white rounded-full transition-all"
-                style={{ width: `${selectedCourse.progress}%` }}
-              />
-            </div>
-            <button className="w-full bg-white text-[hsl(var(--primary))] rounded-xl py-3 text-sm font-bold shadow">
-              {selectedCourse.progress > 0 ? "▶ Продолжить обучение" : "🚀 Начать модуль"}
+            <p className="text-sm text-white/90 leading-relaxed mb-3">{selectedModule.content}</p>
+            <button
+              onClick={() => handleRead(selectedModule.id)}
+              className="w-full bg-white text-[hsl(var(--primary))] rounded-xl py-2.5 text-sm font-bold"
+            >
+              ✓ Понятно, отметить как изученное
             </button>
           </div>
         </div>
       )}
 
-      {/* Сетка модулей */}
-      <div className="p-4 grid grid-cols-2 gap-3">
-        {courses.map((course, i) => {
-          const isActive = selected === course.id;
-          return (
-            <div
-              key={course.id}
-              onClick={() => setSelected(isActive ? null : course.id)}
-              className={`bg-white rounded-2xl overflow-hidden shadow-sm border-2 transition-all cursor-pointer active:scale-95 animate-fade-in ${
-                isActive ? "border-[hsl(var(--primary))] shadow-md" : "border-border"
-              }`}
-              style={{ animationDelay: `${i * 0.08}s`, opacity: 0 }}
-            >
-              <div className={`bg-gradient-to-br ${course.color} p-4 flex flex-col items-center text-center`}>
-                <span className="text-4xl mb-1">{course.icon}</span>
-                {course.progress === 100 && (
-                  <span className="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-medium">✓ Завершён</span>
-                )}
-                {course.progress > 0 && course.progress < 100 && (
-                  <span className="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-medium">В процессе</span>
-                )}
-                {course.progress === 0 && (
-                  <span className="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-medium">Новый</span>
-                )}
-              </div>
-              <div className="p-3">
-                <div className="font-semibold text-xs text-foreground leading-tight mb-1">{course.title}</div>
-                <div className="text-[10px] text-muted-foreground mb-2">{course.lessons} уроков</div>
-                <div className="h-1 bg-secondary rounded-full overflow-hidden">
-                  <div
-                    className={`h-full bg-gradient-to-r ${course.color} rounded-full`}
-                    style={{ width: `${course.progress}%` }}
-                  />
-                </div>
-              </div>
+      {/* Сетка */}
+      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-4">
+        {tags.map((tag) => (
+          <div key={tag} className="mb-4">
+            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">{tag}</div>
+            <div className="grid grid-cols-2 gap-2.5">
+              {modules.filter((m) => m.tag === tag).map((m, i) => {
+                const isRead = read.has(m.id);
+                const isActive = selected === m.id;
+                return (
+                  <button
+                    key={m.id}
+                    onClick={() => setSelected(isActive ? null : m.id)}
+                    className={`relative text-left rounded-2xl overflow-hidden border-2 transition-all active:scale-95 animate-fade-in ${
+                      isActive
+                        ? "border-[hsl(var(--primary))] shadow-md"
+                        : isRead
+                        ? "border-emerald-300"
+                        : "border-border"
+                    }`}
+                    style={{ animationDelay: `${i * 0.06}s`, opacity: 0 }}
+                  >
+                    <div className={`bg-gradient-to-br ${m.color} px-3 pt-3 pb-2 flex flex-col`}>
+                      <span className="text-3xl mb-1">{m.emoji}</span>
+                      {isRead && (
+                        <span className="self-start bg-white/30 text-white text-[9px] px-1.5 py-0.5 rounded-full font-semibold">✓ Изучено</span>
+                      )}
+                    </div>
+                    <div className="bg-white px-2.5 py-2">
+                      <div className="text-xs font-semibold text-foreground leading-tight">{m.title}</div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
-      <div className="h-4" />
     </div>
   );
 }
