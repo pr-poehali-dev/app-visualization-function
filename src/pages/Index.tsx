@@ -441,7 +441,7 @@ const COURSES_DATA = [
     emoji: "🏛️",
     title: "Административное право РФ",
     desc: "Власть, штрафы, госорганы",
-    color: "from-lime-700 to-green-800",
+    color: "from-blue-600 to-sky-800",
     lessons: [
       "Административное право: предмет и система",
       "Органы исполнительной власти в РФ",
@@ -466,8 +466,8 @@ function CoursesPageScreen() {
     const courseDone = course.lessons.filter((_, i) => done.has(`${course.id}-${i}`)).length;
     const pct = Math.round((courseDone / course.lessons.length) * 100);
 
-    // Цепочка Duolingo для курсов 1 и 2
-    const isDuolingo = course.id === 1 || course.id === 2;
+    // Цепочка Duolingo для курсов 1, 2 и 4
+    const isDuolingo = course.id === 1 || course.id === 2 || course.id === 4;
 
     // Змейка: чётные узлы — левее центра, нечётные — правее
     const nodePositions = ["center", "right", "center", "left", "center", "right", "center"];
@@ -502,6 +502,8 @@ function CoursesPageScreen() {
             {(() => {
               const theme = course.id === 2
                 ? { active: "bg-pink-500 border-pink-700", done: "bg-rose-400 border-rose-600", connector: "bg-rose-400", badge: "bg-pink-400", text: "text-rose-700" }
+                : course.id === 4
+                ? { active: "bg-blue-500 border-blue-700", done: "bg-sky-500 border-sky-700", connector: "bg-sky-400", badge: "bg-blue-400", text: "text-blue-700" }
                 : { active: "bg-[hsl(var(--primary))] border-green-800", done: "bg-emerald-500 border-emerald-700", connector: "bg-emerald-400", badge: "bg-[hsl(var(--accent))]", text: "text-emerald-700" };
 
               return (
