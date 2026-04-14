@@ -90,7 +90,7 @@ export default function Index() {
       {/* Status bar */}
       <div className="bg-[hsl(var(--primary))] text-white flex justify-between items-center px-5 pt-3 pb-1 text-xs font-medium">
         <span>9:41</span>
-        <span className="font-oswald tracking-wide text-sm">ЧТО ТАКОЕ ИПОТЕКА</span>
+        <span className="font-oswald tracking-wide text-sm">ЯЗЫКИ ПРАВА</span>
         <div className="flex gap-1 items-center">
           <Icon name="Signal" size={12} />
           <Icon name="Wifi" size={12} />
