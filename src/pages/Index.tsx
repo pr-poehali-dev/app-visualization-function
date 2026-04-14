@@ -100,7 +100,8 @@ export default function Index() {
 
       {/* Content */}
       <div className="flex-1 overflow-hidden">
-        {tab === "home" && (
+        {tab === "home" && <CoursesScreen modules={MODULES} />}
+        {tab === "courses" && (
           <HomeScreen
             messages={messages}
             isTyping={isTyping}
@@ -110,7 +111,6 @@ export default function Index() {
             quickQuestions={QUICK_QUESTIONS}
           />
         )}
-        {tab === "courses" && <CoursesScreen modules={MODULES} />}
         {tab === "profile" && <ProfileScreen />}
         {tab === "settings" && (
           <SettingsScreen
@@ -127,7 +127,7 @@ export default function Index() {
         {(
           [
             { id: "home", icon: "LayoutGrid", label: "Модули" },
-            { id: "courses", icon: "BookOpen", label: "Курсы" },
+            { id: "courses", icon: "MessageCircle", label: "Диалог" },
             { id: "profile", icon: "User", label: "Профиль" },
             { id: "settings", icon: "Settings", label: "Настройки" },
           ] as { id: Tab; icon: string; label: string }[]
