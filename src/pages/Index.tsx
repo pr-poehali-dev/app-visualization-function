@@ -272,96 +272,125 @@ function HomeScreen({
 }
 
 function CoursesScreen({ modules }: { modules: typeof MODULES }) {
-  const [selected, setSelected] = useState<number | null>(null);
   const [read, setRead] = useState<Set<number>>(new Set());
+  const [openId, setOpenId] = useState<number | null>(null);
 
-  const selectedModule = modules.find((m) => m.id === selected);
-
-  const tags = Array.from(new Set(modules.map((m) => m.tag)));
+  const openModule = modules.find((m) => m.id === openId);
+  const percent = Math.round((read.size / modules.length) * 100);
 
   const handleRead = (id: number) => {
     setRead((prev) => new Set([...prev, id]));
-    setSelected(null);
+    setOpenId(null);
   };
+
+  if (openModule) {
+    return (
+      <div className="h-full flex flex-col bg-background">
+        {/* Шапка модуля */}
+        <div className={`bg-gradient-to-br ${openModule.color} px-4 pt-5 pb-6 text-white flex-none`}>
+          <button
+            onClick={() => setOpenId(null)}
+            className="flex items-center gap-1.5 text-white/80 text-sm mb-4"
+          >
+            <Icon name="ChevronLeft" size={18} />
+            Назад к модулям
+          </button>
+          <div className="text-4xl mb-2">{openModule.emoji}</div>
+          <div className="font-oswald text-2xl tracking-wide leading-tight">{openModule.title}</div>
+          <span className="inline-block mt-2 bg-white/20 text-white text-xs px-2.5 py-0.5 rounded-full">{openModule.tag}</span>
+        </div>
+
+        {/* Контент модуля */}
+        <div className="flex-1 overflow-y-auto px-4 py-5">
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-border mb-4">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-1 h-5 bg-[hsl(var(--primary))] rounded-full" />
+              <span className="text-sm font-semibold text-foreground">Краткое объяснение</span>
+            </div>
+            <p className="text-sm text-foreground leading-relaxed">{openModule.content}</p>
+          </div>
+
+          {read.has(openModule.id) ? (
+            <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-center">
+              <div className="text-2xl mb-1">✅</div>
+              <div className="text-sm font-semibold text-emerald-700">Модуль изучен!</div>
+              <div className="text-xs text-emerald-600 mt-0.5">Отличная работа</div>
+            </div>
+          ) : (
+            <button
+              onClick={() => handleRead(openModule.id)}
+              className="w-full bg-[hsl(var(--primary))] text-white rounded-2xl py-3.5 text-sm font-bold shadow-sm active:scale-95 transition-all"
+            >
+              ✓ Изучено — идём дальше
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      {/* Header */}
-      <div className="bg-[hsl(var(--primary))] px-4 pt-4 pb-4 text-white flex-none">
+      {/* Шапка с прогрессом */}
+      <div className="bg-[hsl(var(--primary))] px-4 pt-5 pb-5 text-white flex-none">
         <div className="font-oswald text-2xl tracking-wide">МОДУЛИ</div>
-        <div className="text-green-200 text-sm mt-0.5">{read.size} из {modules.length} изучено</div>
-        <div className="mt-3 h-1.5 bg-white/20 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-[hsl(var(--accent))] rounded-full transition-all"
-            style={{ width: `${Math.round((read.size / modules.length) * 100)}%` }}
-          />
+        <div className="text-green-200 text-sm mt-0.5 mb-4">Выбери тему для изучения</div>
+
+        <div className="bg-white/10 rounded-2xl p-3 flex items-center gap-4">
+          {/* Круговой прогресс */}
+          <div className="relative w-14 h-14 flex-none">
+            <svg className="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
+              <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="5" />
+              <circle
+                cx="28" cy="28" r="22" fill="none"
+                stroke="hsl(var(--accent))"
+                strokeWidth="5"
+                strokeDasharray={`${2 * Math.PI * 22}`}
+                strokeDashoffset={`${2 * Math.PI * 22 * (1 - percent / 100)}`}
+                strokeLinecap="round"
+                className="transition-all duration-500"
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-xs font-bold text-white">{percent}%</span>
+            </div>
+          </div>
+          <div>
+            <div className="text-white font-semibold text-base">{read.size} из {modules.length}</div>
+            <div className="text-green-200 text-xs">модулей пройдено</div>
+            {read.size === modules.length && (
+              <div className="text-[hsl(var(--accent))] text-xs font-semibold mt-0.5">🏆 Все изучены!</div>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Открытый модуль */}
-      {selectedModule && (
-        <div className="flex-none mx-4 mt-4 animate-fade-in">
-          <div className={`bg-gradient-to-br ${selectedModule.color} rounded-2xl p-4 text-white shadow-lg`}>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-3xl">{selectedModule.emoji}</span>
-              <div className="flex-1">
-                <div className="font-semibold text-sm leading-tight">{selectedModule.title}</div>
-                <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">{selectedModule.tag}</span>
-              </div>
+      {/* Сетка модулей */}
+      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-6">
+        <div className="grid grid-cols-2 gap-3">
+          {modules.map((m) => {
+            const isRead = read.has(m.id);
+            return (
               <button
-                onClick={() => setSelected(null)}
-                className="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center flex-none"
+                key={m.id}
+                onClick={() => setOpenId(m.id)}
+                className={`text-left rounded-2xl overflow-hidden border-2 transition-all active:scale-95 shadow-sm ${
+                  isRead ? "border-emerald-300" : "border-border"
+                }`}
               >
-                <Icon name="X" size={13} />
+                <div className={`bg-gradient-to-br ${m.color} px-3 pt-4 pb-3 flex flex-col items-start`}>
+                  <span className="text-3xl mb-2">{m.emoji}</span>
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${isRead ? "bg-white/30 text-white" : "bg-white/20 text-white/80"}`}>
+                    {isRead ? "✓ Изучено" : m.tag}
+                  </span>
+                </div>
+                <div className="bg-white px-3 py-2.5">
+                  <div className="text-xs font-semibold text-foreground leading-tight">{m.title}</div>
+                </div>
               </button>
-            </div>
-            <p className="text-sm text-white/90 leading-relaxed mb-3">{selectedModule.content}</p>
-            <button
-              onClick={() => handleRead(selectedModule.id)}
-              className="w-full bg-white text-[hsl(var(--primary))] rounded-xl py-2.5 text-sm font-bold"
-            >
-              ✓ Понятно, отметить как изученное
-            </button>
-          </div>
+            );
+          })}
         </div>
-      )}
-
-      {/* Сетка */}
-      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-4">
-        {tags.map((tag) => (
-          <div key={tag} className="mb-4">
-            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">{tag}</div>
-            <div className="grid grid-cols-2 gap-2.5">
-              {modules.filter((m) => m.tag === tag).map((m) => {
-                const isRead = read.has(m.id);
-                const isActive = selected === m.id;
-                return (
-                  <button
-                    key={m.id}
-                    onClick={() => setSelected(isActive ? null : m.id)}
-                    className={`relative text-left rounded-2xl overflow-hidden border-2 transition-all active:scale-95 ${
-                      isActive
-                        ? "border-[hsl(var(--primary))] shadow-md scale-[0.98]"
-                        : isRead
-                        ? "border-emerald-300"
-                        : "border-border"
-                    }`}
-                  >
-                    <div className={`bg-gradient-to-br ${m.color} px-3 pt-3 pb-2 flex flex-col`}>
-                      <span className="text-3xl mb-1">{m.emoji}</span>
-                      {isRead && (
-                        <span className="self-start bg-white/30 text-white text-[9px] px-1.5 py-0.5 rounded-full font-semibold">✓ Изучено</span>
-                      )}
-                    </div>
-                    <div className="bg-white px-2.5 py-2">
-                      <div className="text-xs font-semibold text-foreground leading-tight">{m.title}</div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );
