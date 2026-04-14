@@ -101,16 +101,7 @@ export default function Index() {
       {/* Content */}
       <div className="flex-1 overflow-hidden">
         {tab === "home" && <CoursesScreen modules={MODULES} />}
-        {tab === "courses" && (
-          <HomeScreen
-            messages={messages}
-            isTyping={isTyping}
-            input=""
-            setInput={() => {}}
-            sendMessage={sendMessage}
-            quickQuestions={QUICK_QUESTIONS}
-          />
-        )}
+        {tab === "courses" && <CoursesPageScreen />}
         {tab === "profile" && <ProfileScreen />}
         {tab === "settings" && (
           <SettingsScreen
@@ -391,6 +382,163 @@ function CoursesScreen({ modules }: { modules: typeof MODULES }) {
             );
           })}
         </div>
+      </div>
+    </div>
+  );
+}
+
+const COURSES_DATA = [
+  {
+    id: 1,
+    emoji: "⚖️",
+    title: "Основы права",
+    desc: "Как устроена правовая система России",
+    color: "from-green-600 to-emerald-800",
+    lessons: [
+      "Что такое право и закон",
+      "Конституция РФ: главные права граждан",
+      "Как устроены суды в России",
+      "Что такое презумпция невиновности",
+      "Как читать законы и найти нужную статью",
+    ],
+  },
+  {
+    id: 2,
+    emoji: "💼",
+    title: "Трудовые права",
+    desc: "Всё, что нужно знать на работе",
+    color: "from-teal-600 to-green-700",
+    lessons: [
+      "Трудовой договор: на что обратить внимание",
+      "Как законно уволиться без потерь",
+      "Что делать при незаконном увольнении",
+      "Задержка зарплаты: ваши права",
+      "Больничный, отпуск и переработки",
+    ],
+  },
+  {
+    id: 3,
+    emoji: "🛒",
+    title: "Права потребителя",
+    desc: "Как защитить себя при покупках",
+    color: "from-emerald-500 to-teal-700",
+    lessons: [
+      "Возврат товара: 14 дней и не только",
+      "Гарантия: что она покрывает",
+      "Как написать претензию продавцу",
+      "Обман на маркетплейсах: что делать",
+      "Защита при покупке услуг",
+    ],
+  },
+  {
+    id: 4,
+    emoji: "🏠",
+    title: "Жильё и ЖКХ",
+    desc: "Аренда, соседи, коммуналка",
+    color: "from-lime-600 to-green-700",
+    lessons: [
+      "Договор аренды: обязательные пункты",
+      "Права арендатора при выселении",
+      "Долги за ЖКХ: последствия и защита",
+      "Шумные соседи: законные способы",
+      "Управляющая компания: как жаловаться",
+    ],
+  },
+];
+
+function CoursesPageScreen() {
+  const [openCourse, setOpenCourse] = useState<number | null>(null);
+  const [done, setDone] = useState<Set<string>>(new Set());
+
+  const course = COURSES_DATA.find((c) => c.id === openCourse);
+
+  const markLesson = (key: string) => setDone((prev) => new Set([...prev, key]));
+
+  if (course) {
+    const courseDone = course.lessons.filter((_, i) => done.has(`${course.id}-${i}`)).length;
+    const pct = Math.round((courseDone / course.lessons.length) * 100);
+    return (
+      <div className="h-full flex flex-col overflow-hidden">
+        <div className={`bg-gradient-to-br ${course.color} px-4 pt-5 pb-5 text-white flex-none`}>
+          <button onClick={() => setOpenCourse(null)} className="flex items-center gap-1 text-white/80 text-sm mb-3">
+            <Icon name="ChevronLeft" size={18} /> Все курсы
+          </button>
+          <div className="text-4xl mb-1">{course.emoji}</div>
+          <div className="font-oswald text-2xl tracking-wide">{course.title}</div>
+          <div className="text-white/70 text-sm mt-0.5 mb-3">{course.desc}</div>
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
+              <div className="h-full bg-white rounded-full transition-all" style={{ width: `${pct}%` }} />
+            </div>
+            <span className="text-sm font-bold">{pct}%</span>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-2.5">
+          {course.lessons.map((lesson, i) => {
+            const key = `${course.id}-${i}`;
+            const isDone = done.has(key);
+            return (
+              <div key={i} className={`bg-white rounded-2xl border-2 px-4 py-3.5 flex items-center gap-3 transition-all ${isDone ? "border-emerald-300" : "border-border"}`}>
+                <button
+                  onClick={() => markLesson(key)}
+                  className={`w-7 h-7 rounded-full border-2 flex-none flex items-center justify-center transition-all ${isDone ? "bg-emerald-500 border-emerald-500" : "border-muted-foreground/30"}`}
+                >
+                  {isDone && <Icon name="Check" size={13} className="text-white" />}
+                </button>
+                <div className="flex-1">
+                  <div className={`text-sm font-medium leading-tight ${isDone ? "text-muted-foreground line-through" : "text-foreground"}`}>
+                    {lesson}
+                  </div>
+                  <div className="text-[10px] text-muted-foreground mt-0.5">Урок {i + 1}</div>
+                </div>
+                {!isDone && <Icon name="ChevronRight" size={16} className="text-muted-foreground flex-none" />}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-full flex flex-col overflow-hidden">
+      <div className="bg-[hsl(var(--primary))] px-4 pt-5 pb-5 text-white flex-none">
+        <div className="font-oswald text-2xl tracking-wide">КУРСЫ</div>
+        <div className="text-green-200 text-sm mt-0.5">Углублённое изучение правовых тем</div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3">
+        {COURSES_DATA.map((c) => {
+          const total = c.lessons.length;
+          const completed = c.lessons.filter((_, i) => done.has(`${c.id}-${i}`)).length;
+          const pct = Math.round((completed / total) * 100);
+          return (
+            <button
+              key={c.id}
+              onClick={() => setOpenCourse(c.id)}
+              className="bg-white rounded-2xl border border-border overflow-hidden shadow-sm text-left active:scale-[0.98] transition-all"
+            >
+              <div className={`bg-gradient-to-r ${c.color} p-4 flex items-center gap-3`}>
+                <span className="text-4xl">{c.emoji}</span>
+                <div className="flex-1">
+                  <div className="text-white font-semibold text-base">{c.title}</div>
+                  <div className="text-white/70 text-xs mt-0.5">{c.desc}</div>
+                </div>
+                <Icon name="ChevronRight" size={18} className="text-white/70 flex-none" />
+              </div>
+              <div className="px-4 py-3">
+                <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
+                  <span>{completed} из {total} уроков</span>
+                  <span className="font-semibold text-foreground">{pct}%</span>
+                </div>
+                <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
+                  <div className={`h-full bg-gradient-to-r ${c.color} rounded-full transition-all`} style={{ width: `${pct}%` }} />
+                </div>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
